@@ -45,13 +45,13 @@ void Bot::pickStartingRegion()
 
 void Bot::placeArmies()
 {
-	std::stringstream 			location;
 	std::vector<std::string> 	locations;
 
 	randomSeed();
 	int amount_armies_added = 1;
 	while ( armiesLeft > 0 )
 	{
+		std::stringstream location;
 		// pick random region
 		std::random_shuffle(ownedRegions.begin(), ownedRegions.end());
 		int region = ownedRegions.front();
@@ -80,7 +80,7 @@ void Bot::makeMoves()
 	{
 		std::stringstream move;
 		int i = ownedRegions[j];
-		if (regions[i].getArmies() <= 1)
+		if (regions[i].getArmies() <= 10)
 			continue; // Disregard this region
 
 		int target = regions[i].getNeighbor(std::rand() % regions[i].getNbNeighbors());
@@ -96,7 +96,10 @@ void Bot::makeMoves()
 		moves.push_back(move.str());
 	}
 
-	std::cout << string::join(moves) << std::endl;
+	if ( moves.empty())
+		std::cout << "No moves "  << std::endl;
+	else
+		std::cout << string::join(moves) << std::endl;
 }
 
 void Bot::addRegion(const unsigned& noRegion, const unsigned& noSuperRegion)
@@ -261,5 +264,5 @@ void Bot::resetRegionsOwned()
 
 void Bot::randomSeed()
 {
-	std::srand(unsigned(std::time(0)));
+	std::srand(unsigned(std::time()));
 }
