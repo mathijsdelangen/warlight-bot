@@ -16,6 +16,7 @@ Bot::Bot() :
 		armiesLeft(0), 
 		timebank(0) 
 {
+	randomSeed();
 }
 
 Bot::~Bot()
@@ -31,7 +32,6 @@ void Bot::playGame()
 // Pick starting regions
 void Bot::pickStartingRegion()
 {
-	randomSeed();
 	std::random_shuffle(startingRegionsreceived.begin(), startingRegionsreceived.end());
 
 	int picked_region;
@@ -47,7 +47,6 @@ void Bot::placeArmies()
 {
 	std::vector<std::string> 	locations;
 
-	randomSeed();
 	int amount_armies_added = 1;
 	while ( armiesLeft > 0 )
 	{
@@ -264,5 +263,5 @@ void Bot::resetRegionsOwned()
 
 void Bot::randomSeed()
 {
-	std::srand(unsigned(std::time()));
+	std::srand(unsigned(std::time(NULL)));
 }
