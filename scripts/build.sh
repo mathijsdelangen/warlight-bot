@@ -1,0 +1,1 @@
+g++ ../*.cpp -o ../build/main -std=c++0x

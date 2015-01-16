@@ -1,0 +1,1 @@
+cat ../testgames/testmatch2.game | ./../build/main 
