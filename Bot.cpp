@@ -9,7 +9,12 @@
 #include "tools/StringManipulation.h"
 
 Bot::Bot() :
-		armiesLeft(0), timebank(0), timePerMove(0), maxRounds(0), parser(this), phase(NONE)
+		parser(this), 
+		phase(NONE),
+		timePerMove(0), 
+		maxRounds(0), 
+		armiesLeft(0), 
+		timebank(0) 
 {
 }
 
@@ -23,19 +28,43 @@ void Bot::playGame()
 	parser.parseInput();
 }
 
+// Pick starting regions
 void Bot::pickStartingRegion()
 {
-	// START HERE!
-	std::cout << startingRegionsreceived.front() << std::endl;
+	randomSeed();
+	std::random_shuffle(startingRegionsreceived.begin(), startingRegionsreceived.end());
+
+	int picked_region;
+	for ( const auto& starting_region : startingRegionsreceived )
+	{
+		picked_region = starting_region;
+	}
+
+	std::cout << picked_region << std::endl;
 }
 
 void Bot::placeArmies()
 {
-	// START HERE!
-	unsigned region = std::rand() % ownedRegions.size();
-	std::cout << botName << " place_armies " << ownedRegions[region] << " " << armiesLeft
-			<< std::endl;
-	addArmies(ownedRegions[region], armiesLeft);
+	std::stringstream 			location;
+	std::vector<std::string> 	locations;
+
+	randomSeed();
+	int amount_armies_added = 1;
+	while ( armiesLeft > 0 )
+	{
+		// pick random region
+		std::random_shuffle(ownedRegions.begin(), ownedRegions.end());
+		int region = ownedRegions.front();
+
+		location << botName << " place_armies " << region << " " << amount_armies_added;
+		locations.push_back(location.str());
+
+		// Store the current number of armies
+		addArmies(region, amount_armies_added);
+		armiesLeft -= amount_armies_added; 
+	}
+
+	std::cout << string::join(locations) << std::endl;			
 }
 
 void Bot::makeMoves()
@@ -52,7 +81,7 @@ void Bot::makeMoves()
 		std::stringstream move;
 		int i = ownedRegions[j];
 		if (regions[i].getArmies() <= 1)
-			continue;
+			continue; // Disregard this region
 
 		int target = regions[i].getNeighbor(std::rand() % regions[i].getNbNeighbors());
 		// prefer enemy regions
@@ -228,4 +257,9 @@ void Bot::moveArmies(const unsigned& noRegion, const unsigned& toRegion, const i
 void Bot::resetRegionsOwned()
 {
 	ownedRegions.clear();
+}
+
+void Bot::randomSeed()
+{
+	std::srand(unsigned(std::time(0)));
 }

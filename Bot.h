@@ -2,19 +2,19 @@
 #define BOT_H
 
 // stl
-#include <iostream>
-#include <fstream>
-#include <vector>
+#include <algorithm>	//std::rand
 #include <cmath>
+#include <ctime>        // std::time
+#include <fstream>
+#include <iostream>
 #include <sstream>
+#include <vector>
 
 // project
 #include "main.h"
 #include "Parser.h"
 #include "Region.h"
 #include "SuperRegion.h"
-
-
 
 class Bot: boost::noncopyable
 {
@@ -89,21 +89,31 @@ public:
 	void resetRegionsOwned();
 
 private:
-	std::ifstream in;
-	std::vector<Region> regions;
-	std::vector<SuperRegion> superRegions;
+	void randomSeed();
+
+	Parser 		parser;
+	Phase 		phase;
+	
 	std::string botName;
 	std::string opponentBotName;
-	std::vector<int> startingRegionsreceived;
-	std::vector<unsigned> opponentStartingRegions;
-	std::vector<int> ownedRegions;
-	std::vector<int> wastelands;
-	int armiesLeft;
-	int timebank;
-	int timePerMove;
-	int maxRounds;
-	Parser parser;
-	Phase phase;
+	int 		timePerMove;
+	int 		maxRounds;
+	
+	std::vector<int> 			startingRegionsreceived;
+	std::vector<unsigned> 		opponentStartingRegions;
+
+	// input
+	std::ifstream in;
+	
+	// Game info
+	int 						armiesLeft;
+	int 						timebank;
+	std::vector<Region> 		regions;
+	std::vector<SuperRegion> 	superRegions;
+	std::vector<int> 			ownedRegions;
+	std::vector<int> 			wastelands;
+
+
 };
 
 #endif // BOT_H
